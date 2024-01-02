@@ -1,0 +1,436 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+struct CricketScore{
+    char fname[50];  
+    char lname[50];
+    int runs[100];
+    int balls;
+};
+int totalRuns(int *total_runs,int number_of_balls)
+{
+    int sum = 0;
+    for(int i = 0; i < number_of_balls; i++)
+    {
+        int temp = total_runs[i];
+        sum = sum + temp;
+    }
+    return sum;
+}
+void strikeRate(int *runs, int *balls,float *strikerate)
+{
+   *strikerate = (((float)(*runs))/(*balls))*100.0;
+}
+int IntLength(int num)
+{
+    int count = 0;
+    do
+    {
+        /* Increment digit count */
+        count++;
+
+        /* Remove last digit of 'num' */
+        num /= 10;
+    } while(num != 0);
+    return count;
+}
+int main(){
+    struct CricketScore CricketScoresT1[50];
+    struct CricketScore CricketScoresT2[50];
+
+    int playrs, overs;
+    printf("Welcome to T20 cricket league!\nPlease enter the format of the match you are playing!\n");
+    printf("Enter total number of players for cricket match: \n");
+    scanf("%d",&playrs);
+    printf("Enter number of overs in cricket match: \n");
+    scanf("%d",&overs);
+    printf("Please enter details of Team 1! \n");
+    for(int i=0; i<(playrs/2);i++){
+        
+        printf("Enter the name of player number %d: \n",i+1);
+        // scanf("%c",&CricketScores[i].fname); will not work here because we are 
+        //inputting a string. so we use gets(str)
+        //fgets(CricketScoresT1[i].fname,30,stdin);
+        scanf("%s %s",CricketScoresT1[i].fname,CricketScoresT1[i].lname);
+        //gets(CricketScoresT1[i].fname);
+    
+    }
+    printf("Please enter details of Team 2! \n");
+    for(int i=0; i<(playrs/2);i++){
+        
+        printf("Enter the name of player number %d: \n",i+1);
+        // scanf("%c",&CricketScores[i].fname); will not work here because we are 
+        //inputting a string. so we use gets(str)
+        //fgets(CricketScores[i].fname,30,stdin);
+        //fgets(CricketScoresT2[i].fname,30,stdin);
+        scanf("%s %s",CricketScoresT2[i].fname, CricketScoresT2[i].lname);
+    
+    }
+    
+
+    printf("\n\nFollowing players are a part of today's match: \n");
+    printf("Team 1              Team 2\n");
+    char spaces[30] = "";
+    for(int i=0; i<(playrs/2);i++){
+        strcpy(spaces,CricketScoresT1[i].fname);
+        strcat(spaces," ");
+        strcat(spaces,CricketScoresT1[i].lname);
+        for(int j = 0; j < (19 - strlen(CricketScoresT1[i].fname) - strlen(CricketScoresT1[i].lname)); j++)
+        {
+            strcat(spaces," ");
+        }
+        printf("%s",spaces);
+        printf("%s %s\n",CricketScoresT2[i].fname,CricketScoresT2[i].lname);
+        strcpy(spaces,"");
+        //printf("%s        %s \n",CricketScoresT1[i].fname,CricketScoresT2[i].fname);
+    }
+    printf("\nThe match starts now!\n");
+    printf("The captains of each team will now toss for the game.\n\n");
+    printf("What is Team 1's captain going to choose?\n");
+    printf("Enter 1 for heads.\nEnter 2 for tails.\n");
+    int x,y,m,n; 
+    scanf("%d",&x);
+    y = rand()%2;          
+    if(x==y){
+        printf("Team 1 has won the toss!\n\n");
+        printf("Team 1's captain may now choose to bat or bowl.\n");
+        printf("Enter 1 for batting.\nEnter 2 for bowling.\n");
+        scanf("%d",&m);
+        if(m==1){
+            printf("Team 1 will bat first.\n");
+            n=0;
+        }
+        else{
+            printf("Team 1 will bowl first.\n");
+            n=1;
+        }
+
+    }
+    else{
+        printf("Team 2 has won the toss!\n");
+        printf("Team 2's captain may now choose to bat or bowl.\n");
+        printf("Enter 1 for batting.\nEnter 2 for bowling.\n");
+        scanf("%d",&m);
+        if(m==1){
+            printf("Team 2 will bat first.\n");
+            n=1;
+        }
+        else{
+            printf("Team 2 will bowl first.\n");
+            n=0;
+        }
+    }
+    //int RunCount;
+    int BallsPlayed = 0 ;//number of total balls is 6*overs
+    if(n==0){
+        printf("Team 1 will now be batting.\nThe match is off to a great start!\n");
+        int playersBatting = 0;
+        while(playersBatting < (playrs/2) && (overs*6) >= BallsPlayed)
+        {
+            printf("%s %s is now on the pitch!\n",CricketScoresT1[playersBatting].fname,CricketScoresT1[playersBatting].lname);
+            int BallsPlayedbatsman = 0;
+            char tempRuns[5];
+            while((overs*6) >= BallsPlayed)
+            {
+                printf("Runs on %dth ball: ",BallsPlayed+1);
+                scanf("%s",tempRuns);
+                if(strcmp(tempRuns,"OUT") == 0)
+                {
+                    CricketScoresT1[playersBatting].balls = BallsPlayedbatsman;
+                    playersBatting++;
+                    BallsPlayed++;
+                    break;
+                }
+                CricketScoresT1[playersBatting].runs[BallsPlayedbatsman] = atoi(tempRuns);
+                BallsPlayed++;
+                BallsPlayedbatsman++;
+            }
+        }
+        printf("Results of the first innings:\n");
+        printf("Name(Team 1)       Runs(balls)        Strike Rate\n");
+        strcpy(spaces,"");
+        for(int i=0; i<(playrs/2);i++)
+        {
+            strcpy(spaces,CricketScoresT1[i].fname);
+            strcat(spaces, " ");
+            strcat(spaces,CricketScoresT1[i].lname);
+            for(int j=0;j < (18 - (strlen(CricketScoresT1[i].fname) + strlen(CricketScoresT1[i].lname)));j++)
+            {
+                strcat(spaces," ");
+            }
+            printf("%s",spaces);
+            int numberofballs = sizeof(CricketScoresT1[i].runs)/sizeof(CricketScoresT1[i].runs[0]);   
+            printf("%d(%d)",totalRuns(CricketScoresT1[i].runs,numberofballs),CricketScoresT1[i].balls);
+            char spaces2[50];
+            for(int j=0;j < (19 - (IntLength(totalRuns(CricketScoresT1[i].runs,numberofballs)) + IntLength(CricketScoresT1[i].balls) + 2));j++)
+            {
+                strcat(spaces2," ");
+            }
+            float strike_rate;
+            int total_runs = totalRuns(CricketScoresT1[i].runs,numberofballs);
+            strikeRate(&total_runs,&CricketScoresT1[i].balls,&strike_rate);
+            printf("%s%.2f%%\n",spaces2,strike_rate);
+            strcpy(spaces,"");
+            strcpy(spaces2,"");
+        }
+        int totalrunsInnings1 = 0;
+        for (int i = 0; i < (playrs/2); i++)
+        {
+            int numberofballs = sizeof(CricketScoresT1[i].runs)/sizeof(CricketScoresT1[i].runs[0]);
+            totalrunsInnings1 = totalrunsInnings1 + totalRuns(CricketScoresT1[i].runs,numberofballs);
+        }
+        printf("Team 2 needs %d runs to win in %d overs.\n", totalrunsInnings1,overs);
+        playersBatting = 0;
+        int totalrunsInnings2 = 0;
+        int BallsPlayed = 0;
+        while(playersBatting < (playrs/2) && (overs*6) >= BallsPlayed && totalrunsInnings1 > totalrunsInnings2)
+        {
+            printf("%s %s is now on the pitch!\n",CricketScoresT2[playersBatting].fname,CricketScoresT2[playersBatting].lname);
+            int BallsPlayedbatsman = 0;
+            char tempRuns[5];
+            while((overs*6) >= BallsPlayed)
+            {
+                if(BallsPlayed != 0 && BallsPlayed%5 == 0)
+                {
+                    printf("%d runs left to win in %d balls!\n",totalrunsInnings1 - totalrunsInnings2,(overs * 6) - BallsPlayed + 2);
+                }
+                printf("Runs on %dth ball: ",BallsPlayed+1);
+                scanf("%s",tempRuns);
+                if(strcmp(tempRuns,"OUT") == 0)
+                {
+                    CricketScoresT2[playersBatting].balls = BallsPlayedbatsman;
+                    playersBatting++;
+                    BallsPlayed++;
+                    break;
+                }
+                totalrunsInnings2 = totalrunsInnings2 + atoi(tempRuns);
+                CricketScoresT2[playersBatting].runs[BallsPlayedbatsman] = atoi(tempRuns);
+                BallsPlayed++;
+                BallsPlayedbatsman++;
+            }
+        }
+        printf("Summary of the match:\n");
+        printf("Results of the first innings:\n");
+        printf("Name(Team 1)       Runs(balls)        Strike Rate\n");
+        strcpy(spaces,"");
+        for(int i=0; i<(playrs/2);i++)
+        {
+            strcpy(spaces,CricketScoresT1[i].fname);
+            strcat(spaces, " ");
+            strcat(spaces,CricketScoresT1[i].lname);
+            for(int j=0;j < (18 - (strlen(CricketScoresT1[i].fname) + strlen(CricketScoresT1[i].lname)));j++)
+            {
+                strcat(spaces," ");
+            }
+            printf("%s",spaces);
+            int numberofballs = sizeof(CricketScoresT1[i].runs)/sizeof(CricketScoresT1[i].runs[0]);   
+            printf("%d(%d)",totalRuns(CricketScoresT1[i].runs,numberofballs),CricketScoresT1[i].balls);
+            char spaces2[50];
+            for(int j=0;j < (19 - (IntLength(totalRuns(CricketScoresT1[i].runs,numberofballs)) + IntLength(CricketScoresT1[i].balls) + 2));j++)
+            {
+                strcat(spaces2," ");
+            }
+            float strike_rate;
+            int total_runs = totalRuns(CricketScoresT1[i].runs,numberofballs);
+            strikeRate(&total_runs,&CricketScoresT1[i].balls,&strike_rate);
+            printf("%s%.2f%%\n",spaces2,strike_rate);
+            strcpy(spaces,"");
+            strcpy(spaces2,"");
+        }
+        printf("Results of the second innings:\n");
+        printf("Name(Team 2)       Runs(balls)        Strike Rate\n");
+        strcpy(spaces,"");
+        for(int i=0; i<(playrs/2);i++)
+        {
+            strcpy(spaces,CricketScoresT2[i].fname);
+            strcat(spaces, " ");
+            strcat(spaces,CricketScoresT2[i].lname);
+            for(int j=0;j < (18 - (strlen(CricketScoresT2[i].fname) + strlen(CricketScoresT2[i].lname)));j++)
+            {
+                strcat(spaces," ");
+            }
+            printf("%s",spaces);
+            int numberofballs = sizeof(CricketScoresT2[i].runs)/sizeof(CricketScoresT2[i].runs[0]);   
+            printf("%d(%d)",totalRuns(CricketScoresT2[i].runs,numberofballs),CricketScoresT2[i].balls);
+            char spaces2[50];
+            for(int j=0;j < (19 - (IntLength(totalRuns(CricketScoresT2[i].runs,numberofballs)) + IntLength(CricketScoresT2[i].balls) + 2));j++)
+            {
+                strcat(spaces2," ");
+            }
+            float strike_rate;
+            int total_runs = totalRuns(CricketScoresT2[i].runs,numberofballs);
+            strikeRate(&total_runs,&CricketScoresT2[i].balls,&strike_rate);
+            printf("%s%.2f%%\n",spaces2,strike_rate);
+            strcpy(spaces,"");
+            strcpy(spaces2,"");
+        }
+       
+        if(totalrunsInnings1 < totalrunsInnings2)
+        {
+            printf("Team 2 wins by %d wickets!\n",(playrs/2) - playersBatting);
+        }
+        else
+        {
+            printf("Team 1 wins by %d runs!\n",totalrunsInnings1 - totalrunsInnings2);
+        }
+
+    }
+    else{
+
+        printf("Team 2 will now be batting.\nThe match is off to a great start!\n");
+        int playersBatting = 0;
+        while(playersBatting < (playrs/2) && (overs*6) >= BallsPlayed)
+        {
+            printf("%s %s is now on the pitch!\n",CricketScoresT2[playersBatting].fname,CricketScoresT2[playersBatting].lname);
+            int BallsPlayedbatsman = 0;
+            char tempRuns[5];
+            while((overs*6) >= BallsPlayed)
+            {
+                printf("Runs on %dth ball: ",BallsPlayed+1);
+                scanf("%s",tempRuns);
+                if(strcmp(tempRuns,"OUT") == 0)
+                {
+                    CricketScoresT2[playersBatting].balls = BallsPlayedbatsman;
+                    playersBatting++;
+                    BallsPlayed++;  
+                    break;
+                }
+                CricketScoresT2[playersBatting].runs[BallsPlayedbatsman] = atoi(tempRuns);
+                BallsPlayed++;
+                BallsPlayedbatsman++;
+            }
+        }
+        printf("Results of the first innings:\n");
+        printf("Name(Team 2)       Runs(balls)        Strike Rate\n");
+        strcpy(spaces,"");
+        for(int i=0; i<(playrs/2);i++)
+        {
+            strcpy(spaces,CricketScoresT2[i].fname);
+            strcat(spaces, " ");
+            strcat(spaces,CricketScoresT2[i].lname);
+            for(int j=0;j < (18 - (strlen(CricketScoresT2[i].fname) + strlen(CricketScoresT2[i].lname)));j++)
+            {
+                strcat(spaces," ");
+            }
+            printf("%s",spaces);
+            int numberofballs = sizeof(CricketScoresT2[i].runs)/sizeof(CricketScoresT2[i].runs[0]);   
+            printf("%d(%d)",totalRuns(CricketScoresT2[i].runs,numberofballs),CricketScoresT2[i].balls);
+            char spaces2[50];
+            for(int j=0;j < (19 - (IntLength(totalRuns(CricketScoresT2[i].runs,numberofballs)) + IntLength(CricketScoresT2[i].balls) + 2));j++)
+            {
+                strcat(spaces2," ");
+            }
+            float strike_rate;
+            int total_runs = totalRuns(CricketScoresT2[i].runs,numberofballs);
+            strikeRate(&total_runs,&CricketScoresT2[i].balls,&strike_rate);
+            printf("%s%.2f%%\n",spaces2,strike_rate);
+            strcpy(spaces,"");
+            strcpy(spaces2,"");
+        }
+        int totalrunsInnings1 = 0;
+        for (int i = 0; i < (playrs/2); i++)
+        {
+            int numberofballs = sizeof(CricketScoresT2[i].runs)/sizeof(CricketScoresT2[i].runs[0]);
+            totalrunsInnings1 = totalrunsInnings1 + totalRuns(CricketScoresT2[i].runs,numberofballs);
+        }
+        printf("Team 1 needs %d runs to win in %d overs\n", totalrunsInnings1,overs);
+        playersBatting = 0;
+        int totalrunsInnings2 = 0;
+        int BallsPlayed = 0;
+        while(playersBatting < (playrs/2) && (overs*6) >= BallsPlayed && totalrunsInnings1 > totalrunsInnings2)
+        {
+            printf("%s %s is now on the pitch\n",CricketScoresT1[playersBatting].fname,CricketScoresT1[playersBatting].lname);
+            int BallsPlayedbatsman = 0;
+            char tempRuns[5];
+            while((overs*6) >= BallsPlayed)
+            {
+                if(BallsPlayed != 0 && BallsPlayed%5 == 0)
+                {
+                    printf("%d runs left to win in %d balls\n",totalrunsInnings1 - totalrunsInnings2,(overs * 6) - BallsPlayed + 2);
+                }
+                printf("Runs on %dth ball: ",BallsPlayed+1);
+                scanf("%s",tempRuns);
+                if(strcmp(tempRuns,"OUT") == 0)
+                {
+                    CricketScoresT1[playersBatting].balls = BallsPlayedbatsman;
+                    playersBatting++;
+                    BallsPlayed++;
+                    break;
+                }
+                totalrunsInnings2 = totalrunsInnings2 + atoi(tempRuns);
+                CricketScoresT1[playersBatting].runs[BallsPlayedbatsman] = atoi(tempRuns);
+                BallsPlayed++;
+                BallsPlayedbatsman++;
+            }
+        }
+        printf("Summary of the match:\n");
+        printf("Results of the second innings:\n");
+        printf("Name(Team 2)       Runs(balls)        Strike Rate\n");
+        strcpy(spaces,"");
+        for(int i=0; i<(playrs/2);i++)
+        {
+            strcpy(spaces,CricketScoresT2[i].fname);
+            strcat(spaces, " ");
+            strcat(spaces,CricketScoresT2[i].lname);
+            for(int j=0;j < (18 - (strlen(CricketScoresT2[i].fname) + strlen(CricketScoresT2[i].lname)));j++)
+            {
+                strcat(spaces," ");
+            }
+            printf("%s",spaces);
+            int numberofballs = sizeof(CricketScoresT2[i].runs)/sizeof(CricketScoresT2[i].runs[0]);   
+            printf("%d(%d)",totalRuns(CricketScoresT2[i].runs,numberofballs),CricketScoresT2[i].balls);
+            char spaces2[50];
+            for(int j=0;j < (19 - (IntLength(totalRuns(CricketScoresT2[i].runs,numberofballs)) + IntLength(CricketScoresT2[i].balls) + 2));j++)
+            {
+                strcat(spaces2," ");
+            }
+            float strike_rate;
+            int total_runs = totalRuns(CricketScoresT2[i].runs,numberofballs);
+            strikeRate(&total_runs,&CricketScoresT2[i].balls,&strike_rate);
+            printf("%s%.2f%%\n",spaces2,strike_rate);
+            strcpy(spaces,"");
+            strcpy(spaces2,"");
+        }
+        }
+        printf("Results of the second innings:\n");
+        printf("Name(Team 1)       Runs(balls)        Strike Rate\n");
+        strcpy(spaces,"");
+        for(int i=0; i<(playrs/2);i++)
+        {
+            strcpy(spaces,CricketScoresT1[i].fname);
+            strcat(spaces, " ");
+            strcat(spaces,CricketScoresT1[i].lname);
+            for(int j=0;j < (18 - (strlen(CricketScoresT1[i].fname) + strlen(CricketScoresT1[i].lname)));j++)
+            {
+                strcat(spaces," ");
+            }
+            printf("%s",spaces);
+            int numberofballs = sizeof(CricketScoresT1[i].runs)/sizeof(CricketScoresT1[i].runs[0]);   
+            printf("%d(%d)",totalRuns(CricketScoresT1[i].runs,numberofballs),CricketScoresT1[i].balls);
+            char spaces2[50];
+            for(int j=0;j < (19 - (IntLength(totalRuns(CricketScoresT1[i].runs,numberofballs)) + IntLength(CricketScoresT1[i].balls) + 2));j++)
+            {
+                strcat(spaces2," ");
+            }
+            float strike_rate;
+            int total_runs = totalRuns(CricketScoresT1[i].runs,numberofballs);
+            strikeRate(&total_runs,&CricketScoresT1[i].balls,&strike_rate);
+            printf("%s%.2f%%\n",spaces2,strike_rate);
+            strcpy(spaces,"");
+            strcpy(spaces2,"");
+        }
+       
+
+    if(totalrunsInnings1 < totalrunsInnings2)
+    {
+        printf("Team 1 wins by %d wickets\n",(playrs/2) - playersBatting);
+    }
+    else
+    {
+        printf("Team 2 wins by %d runs\n",totalrunsInnings1 - totalrunsInnings2);
+    }
+    
+    
+    
+    return 0;
+}
